@@ -1,0 +1,62 @@
+<!-- @format -->
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+
+<link href="http://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/a549aa8780dbda16f6cff545aeabc3d71073911e/build/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+
+<form [formGroup]="addHolidayForm" class="form-inline" (ngSubmit)="onSave()">
+    <div class="form-group">
+        <input type="text" placeholder="Title" formControlName="title" class="form-control" />
+        <div class="alert alert-danger" *ngIf="
+        _addHolidayForm['title'].errors &&
+        (_addHolidayForm['title'].touched || invalidFormSubmited)
+      ">
+            <div *ngIf="_addHolidayForm['title'].errors?.['required']">
+                Title is required
+            </div>
+            <div *ngIf="_addHolidayForm['title'].errors?.['minlength']">
+                minimum length is 3 characters
+            </div>
+            <div *ngIf="_addHolidayForm['title'].errors?.['maxlength']">
+                maxmimum length is 15 characters
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="input-group date" id="datetimepicker1">
+            <input class="form-control" formControlName="startDate" placeholder="Start Date" [minDate]="minDate" name="dp" ngbDatepicker #d="ngbDatepicker" />
+            <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar" (click)="d.toggle()"></span>
+            </span>
+        </div>
+        <div class="alert alert-danger" *ngIf="
+        _addHolidayForm['startDate'].errors &&
+        (_addHolidayForm['startDate'].touched || invalidFormSubmited)
+      ">
+            <div *ngIf="_addHolidayForm['startDate'].errors?.['required']">
+                Start Date is required
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="input-group date" id="datetimepicker1">
+            <input class="form-control" formControlName="endDate" placeholder="End Date" name="dp" ngbDatepicker #ed="ngbDatepicker" />
+            <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar" (click)="ed.toggle()"></span>
+            </span>
+        </div>
+        <div class="alert alert-danger" *ngIf="
+        _addHolidayForm['endDate'].errors &&
+        (_addHolidayForm['endDate'].touched || invalidFormSubmited)
+      ">
+            <div *ngIf="_addHolidayForm['endDate'].errors?.['required']">
+                End Date is required
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-warning" [disabled]="addHolidayForm.invalid">
+    Save
+  </button>
+</form>
