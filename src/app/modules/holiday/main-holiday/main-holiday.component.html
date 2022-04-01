@@ -1,4 +1,4 @@
 <!-- @format -->
 
-<app-add-holiday></app-add-holiday>
-<app-list-holiday></app-list-holiday>
+<app-add-holiday (addHolidayEvent)="onAddHoliday($event)"></app-add-holiday>
+<app-list-holiday [holidayList]="holidayList"></app-list-holiday>

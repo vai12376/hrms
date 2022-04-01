@@ -7,6 +7,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ListHolidayComponent } from "./main-holiday/list-holiday/list-holiday.component";
 import { MainHolidayComponent } from "./main-holiday/main-holiday.component";
+import { NgxPaginationModule } from "ngx-pagination";
 
 @NgModule({
   declarations: [
@@ -14,7 +15,13 @@ import { MainHolidayComponent } from "./main-holiday/main-holiday.component";
     ListHolidayComponent,
     MainHolidayComponent,
   ],
-  imports: [CommonModule, NgbModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    NgbModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxPaginationModule,
+  ],
   exports: [MainHolidayComponent],
 })
 export class HolidayModule {}
