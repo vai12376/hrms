@@ -5,7 +5,7 @@
 <div class="h3">Holiday</div>
 
 <div class="shadow-sm p-5 mb-5 bg-white rounded">
-    <form [formGroup]="addHolidayForm" class="form-inline" (ngSubmit)="onSave()">
+    <form class="form-inline" [formGroup]="addHolidayForm" (ngSubmit)="onSave()">
         <div class="form-group">
             <input type="text" placeholder="Title" formControlName="title" class="form-control" />
             <div class="alert alert-danger" *ngIf="
@@ -14,6 +14,9 @@
         ">
                 <div *ngIf="_addHolidayForm['title'].errors?.['required']">
                     Title is required
+                </div>
+                <div *ngIf="_addHolidayForm['title'].errors?.['pattern']">
+                    only alphabets are allowed
                 </div>
                 <div *ngIf="_addHolidayForm['title'].errors?.['minlength']">
                     minimum length is 3 characters
@@ -25,7 +28,7 @@
         </div>
         <div class="form-group">
             <div class="input-group date" id="datetimepicker1">
-                <input class="form-control" formControlName="startDate" placeholder="Start Date" [minDate]="minDate" name="dp" ngbDatepicker #d="ngbDatepicker" autocomplete="off" />
+                <input class="form-control" formControlName="startDate" placeholder="Start Date(yyyy-mm-dd)" [minDate]="minDate" name="dp" ngbDatepicker #d="ngbDatepicker" autocomplete="off" />
                 <span class="input-group-addon">
           <span
             class="glyphicon glyphicon-calendar"
@@ -40,12 +43,18 @@
                 <div *ngIf="_addHolidayForm['startDate'].errors?.['required']">
                     Start Date is required
                 </div>
+                <div *ngIf="_addHolidayForm['startDate'].errors?.['ngbDate']?.invalid">
+                    Start Date is invalid
+                </div>
+                <div *ngIf="_addHolidayForm['startDate'].errors?.['ngbDate']?.minDate">
+                    enter minimum Date of today
+                </div>
             </div>
         </div>
 
         <div class="form-group">
             <div class="input-group date" id="datetimepicker1">
-                <input class="form-control" formControlName="endDate" placeholder="End Date" name="dp" ngbDatepicker #ed="ngbDatepicker" autocomplete="off" />
+                <input class="form-control" formControlName="endDate" [minDate]="minDate" placeholder="End Date(yyyy-mm-dd)" name="dp" ngbDatepicker #ed="ngbDatepicker" autocomplete="off" />
                 <span class="input-group-addon">
           <span
             class="glyphicon glyphicon-calendar"
@@ -60,14 +69,22 @@
                 <div *ngIf="_addHolidayForm['endDate'].errors?.['required']">
                     End Date is required
                 </div>
+                <div *ngIf="_addHolidayForm['endDate'].errors?.['ngbDate']?.invalid">
+                    End Date is invalid
+                </div>
+                <div *ngIf="_addHolidayForm['endDate'].errors?.['ngbDate']?.minDate">
+                    enter minimum Date of today
+                </div>
                 <div *ngIf="_addHolidayForm['endDate'].errors?.['fromToDate']">
                     End Date should not be previous date from Start Date
                 </div>
             </div>
         </div>
 
-        <button type="submit" [disabled]="addHolidayForm.invalid" class="btn btn-warning">
+        <button #saveBtn type="submit" class="btn btn-warning" [disabled]="addHolidayForm.invalid">
       Save
     </button>
     </form>
 </div>
+
+<app-list-holiday (onEditHolidayEvent)="onEditHoliday($event)"></app-list-holiday>

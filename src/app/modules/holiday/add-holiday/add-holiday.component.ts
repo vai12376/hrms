@@ -1,8 +1,17 @@
 /** @format */
 
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
+import { UUID } from "angular2-uuid";
+import { HolidayService } from "src/app/core/services/holiday/holiday.service";
 import { IHolidayData } from "src/app/shared/model/interfaces";
 import { CustomeValidators } from "src/app/shared/validators/custom-validators";
 
@@ -15,17 +24,15 @@ export class AddHolidayComponent implements OnInit {
   minDate: NgbDateStruct;
   addHolidayForm: FormGroup;
   invalidFormSubmited = false;
-  @Output() addHolidayEvent = new EventEmitter<IHolidayData>();
 
-  constructor(private formBuilder: FormBuilder) {
+  @ViewChild("saveBtn") saveBtn: ElementRef | undefined;
+  constructor(
+    private formBuilder: FormBuilder,
+    private hDService: HolidayService
+  ) {
     let curDate = new Date();
+    this.minDate = this.dateToNgb(curDate);
 
-    this.minDate = {
-      year: curDate.getFullYear(),
-      month: curDate.getMonth() + 1,
-      day: curDate.getDate(),
-    };
-    console.log(this.minDate);
     this.addHolidayForm = this.initializeForm();
   }
 
@@ -40,6 +47,7 @@ export class AddHolidayComponent implements OnInit {
             Validators.required,
             Validators.minLength(3),
             Validators.maxLength(15),
+            Validators.pattern(/^[A-Za-z]+$/),
           ],
         ],
         startDate: [null, Validators.required],
@@ -51,21 +59,45 @@ export class AddHolidayComponent implements OnInit {
     );
     return form;
   }
+
   get _addHolidayForm() {
     return this.addHolidayForm.controls;
   }
 
-  toDate(date: NgbDateStruct): Date | null {
+  ngbToDate(date: NgbDateStruct): Date | null {
     return date ? new Date(date.year, date.month - 1, date.day) : null;
+  }
+
+  dateToNgb(date: Date) {
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate(),
+    };
+  }
+
+  onEditHoliday(holidayData: IHolidayData) {
+    let hData = {
+      title: holidayData.title,
+      startDate: this.dateToNgb(holidayData.startDate),
+      endDate: this.dateToNgb(holidayData.endDate),
+    };
+
+    this.addHolidayForm.patchValue(hData);
+    if (this.saveBtn) {
+      this.saveBtn.nativeElement.innerHTML = "Edit";
+    }
   }
   onSave() {
     if (this.addHolidayForm.valid) {
       let formData = this.addHolidayForm.value;
-      formData.startDate = this.toDate(formData.startDate);
-      formData.endDate = this.toDate(formData.endDate);
+      formData.id = UUID.UUID();
+      formData.startDate = this.ngbToDate(formData.startDate);
+      formData.endDate = this.ngbToDate(formData.endDate);
 
       let formNewData: IHolidayData = formData;
-      this.addHolidayEvent.emit(formNewData);
+      this.hDService.addHolidayData(formNewData);
+
       this.addHolidayForm.reset();
     } else {
       this.invalidFormSubmited = true;

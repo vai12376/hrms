@@ -10,25 +10,29 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="
-          let item of holidayList;
-          let i;
-          as: index | paginate: { itemsPerPage: 1, currentPage: p }
-        ">
+            <tr *ngFor="let item of holidayList | paginate: pageConfig; index as i">
                 <td>{{ item.title }}</td>
                 <td>{{ item.startDate | date: "dd/MM/yyyy" }}</td>
                 <td>{{ item.endDate | date: "dd/MM/yyyy" }}</td>
                 <td>
-                    <button type="button" class="btn btn-default btn-sm" (click)="onEditEvent.emit(i)">
+                    <button type="button" class="btn btn-default btn-sm" (click)="onEditHolidayEvent.emit(item)">
             <span class="glyphicon glyphicon-pencil"></span>
           </button>
-                    <button type="button" class="btn btn-default btn-sm" (click)="onDeleteEvent.emit(i)">
+                    <button type="button" class="btn btn-default btn-sm" (click)="onDeleteHoliday(item.id)">
             <span class="glyphicon glyphicon-trash"></span>
           </button>
                 </td>
             </tr>
         </tbody>
-
-        <pagination-controls (pageChange)="p = $event"></pagination-controls>
     </table>
+    <div class="container">
+        <div class="pull-right">
+            <pagination-controls class="pull-right" (pageChange)="pageChange($event)"></pagination-controls>
+            <label for="rpp">row per page:</label>
+            <select id="rpp" (change)="onRowPerPageChange($event)">
+        <option>2</option>
+        <option>4</option>
+      </select>
+        </div>
+    </div>
 </div>

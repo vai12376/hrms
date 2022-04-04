@@ -1,8 +1,7 @@
 /** @format */
 
-import { NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
-
 export interface IHolidayData {
+  id: String;
   title: String;
   startDate: Date;
   endDate: Date;

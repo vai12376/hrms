@@ -1,6 +1,7 @@
 /** @format */
 
 import { Component, Input, OnInit, EventEmitter, Output } from "@angular/core";
+import { HolidayService } from "src/app/core/services/holiday/holiday.service";
 import { IHolidayData } from "src/app/shared/model/interfaces";
 
 @Component({
@@ -9,32 +10,46 @@ import { IHolidayData } from "src/app/shared/model/interfaces";
   styleUrls: ["./list-holiday.component.css"],
 })
 export class ListHolidayComponent implements OnInit {
-  @Input() holidayList: any = [];
-
-  @Output() onEditEvent = new EventEmitter();
-  @Output() onDeleteEvent = new EventEmitter();
-
+  holidayList: any = [];
+  @Output() onEditHolidayEvent = new EventEmitter();
   titleSortFlag = true;
   stSortFlag = true;
   edSortFlag = true;
-  p: number = 1;
-  constructor() {}
 
-  ngOnInit(): void {}
+  pageConfig = { itemsPerPage: 2, currentPage: 1 };
+
+  constructor(private hDService: HolidayService) {}
+
+  ngOnInit(): void {
+    this.holidayList = this.hDService.getHolidayData();
+  }
+
+  onDeleteHoliday(id: String) {
+    this.hDService.deleteHolidayData(id);
+  }
+
+  pageChange(page: number) {
+    this.pageConfig.currentPage = page;
+  }
+  onRowPerPageChange(e: Event) {
+    let rpp = parseInt((e.target as HTMLSelectElement).value);
+    this.pageConfig.itemsPerPage = rpp;
+    this.pageConfig.currentPage = 1;
+  }
 
   sortStartDate() {
     this.stSortFlag = !this.stSortFlag;
-    let f = this.stSortFlag;
-    this.holidayList.sort(function (a: IHolidayData, b: IHolidayData) {
+    // let flag = this.stSortFlag;
+    this.holidayList.sort((a: IHolidayData, b: IHolidayData) => {
       if (a.startDate < b.startDate) {
-        if (f) {
+        if (this.stSortFlag) {
           return 1;
         } else {
           return -1;
         }
       }
       if (a.startDate > b.startDate) {
-        if (f) {
+        if (this.stSortFlag) {
           return -1;
         } else {
           return 1;
@@ -43,20 +58,19 @@ export class ListHolidayComponent implements OnInit {
       return 0;
     });
   }
+
   sortEndDate() {}
   sortTitle() {
     this.titleSortFlag = !this.titleSortFlag;
-    let f = this.titleSortFlag;
-    this.holidayList.sort(function (a: IHolidayData, b: IHolidayData) {
+    this.holidayList.sort((a: IHolidayData, b: IHolidayData) => {
       if (a.title < b.title) {
-        if (f) {
+        if (this.titleSortFlag) {
           return 1;
         } else {
           return -1;
         }
-      }
-      if (a.title > b.title) {
-        if (f) {
+      } else if (a.title > b.title) {
+        if (this.titleSortFlag) {
           return -1;
         } else {
           return 1;
