@@ -8,9 +8,10 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ListHolidayComponent } from "./add-holiday/list-holiday/list-holiday.component";
 
 import { NgxPaginationModule } from "ngx-pagination";
+import { MainHolidayComponent } from './main-holiday/main-holiday.component';
 
 @NgModule({
-  declarations: [AddHolidayComponent, ListHolidayComponent],
+  declarations: [AddHolidayComponent, ListHolidayComponent, MainHolidayComponent],
   imports: [
     CommonModule,
     NgbModule,

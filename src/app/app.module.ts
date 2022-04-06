@@ -10,7 +10,7 @@ import { CandidateModule } from "./modules/candidate/candidate.module";
 import { EmployeeModule } from "./modules/employee/employee.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HolidayModule } from "./modules/holiday/holiday.module";
-
+import { NgxUiLoaderModule } from "ngx-ui-loader";
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +22,7 @@ import { HolidayModule } from "./modules/holiday/holiday.module";
     HolidayModule,
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
+    NgxUiLoaderModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

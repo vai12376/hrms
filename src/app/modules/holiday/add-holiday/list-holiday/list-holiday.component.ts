@@ -3,7 +3,7 @@
 import { Component, Input, OnInit, EventEmitter, Output } from "@angular/core";
 import { HolidayService } from "src/app/core/services/holiday/holiday.service";
 import { IHolidayData } from "src/app/shared/model/interfaces";
-
+import { Utility } from "src/app/shared/utilities/utility";
 @Component({
   selector: "app-list-holiday",
   templateUrl: "./list-holiday.component.html",
@@ -16,7 +16,7 @@ export class ListHolidayComponent implements OnInit {
   stSortFlag = true;
   edSortFlag = true;
 
-  pageConfig = { itemsPerPage: 2, currentPage: 1 };
+  pageConfig = Utility.pageConfig;
 
   constructor(private hDService: HolidayService) {}
 
@@ -32,14 +32,13 @@ export class ListHolidayComponent implements OnInit {
     this.pageConfig.currentPage = page;
   }
   onRowPerPageChange(e: Event) {
-    let rpp = parseInt((e.target as HTMLSelectElement).value);
-    this.pageConfig.itemsPerPage = rpp;
+    let rowPerPage = parseInt((e.target as HTMLSelectElement).value);
+    this.pageConfig.itemsPerPage = rowPerPage;
     this.pageConfig.currentPage = 1;
   }
 
   sortStartDate() {
     this.stSortFlag = !this.stSortFlag;
-    // let flag = this.stSortFlag;
     this.holidayList.sort((a: IHolidayData, b: IHolidayData) => {
       if (a.startDate < b.startDate) {
         if (this.stSortFlag) {
@@ -59,7 +58,26 @@ export class ListHolidayComponent implements OnInit {
     });
   }
 
-  sortEndDate() {}
+  sortEndDate() {
+    this.edSortFlag = !this.edSortFlag;
+    this.holidayList.sort((a: IHolidayData, b: IHolidayData) => {
+      if (a.endDate < b.endDate) {
+        if (this.edSortFlag) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+      if (a.endDate > b.endDate) {
+        if (this.edSortFlag) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+      return 0;
+    });
+  }
   sortTitle() {
     this.titleSortFlag = !this.titleSortFlag;
     this.holidayList.sort((a: IHolidayData, b: IHolidayData) => {
