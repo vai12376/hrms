@@ -9,7 +9,7 @@ import { ListHolidayComponent } from "./add-holiday/list-holiday/list-holiday.co
 
 import { NgxPaginationModule } from "ngx-pagination";
 import { MainHolidayComponent } from './main-holiday/main-holiday.component';
-
+import { AngularMyDatePickerModule } from 'angular-mydatepicker';
 @NgModule({
   declarations: [AddHolidayComponent, ListHolidayComponent, MainHolidayComponent],
   imports: [
@@ -18,6 +18,7 @@ import { MainHolidayComponent } from './main-holiday/main-holiday.component';
     FormsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
+    AngularMyDatePickerModule
   ],
   exports: [AddHolidayComponent],
 })
